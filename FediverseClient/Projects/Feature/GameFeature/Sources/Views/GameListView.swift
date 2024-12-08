@@ -14,14 +14,19 @@ public struct GameListView: View {
     
     public var body: some View {
         ScrollView {
-            HStack {
-                Text("Choose the game you want")
-                    .font(.system(size: 32, weight: .bold, design: .rounded))
-                Spacer()
-            }
+            SubTitle()
         }
         .navigationTitle("Games")
         .padding(.horizontal, 16)
+    }
+    
+    @ViewBuilder
+    private func SubTitle() -> some View {
+        HStack {
+            Text("Choose the game you want")
+                .font(.system(size: 32, weight: .bold, design: .rounded))
+            Spacer()
+        }
     }
 }
 
