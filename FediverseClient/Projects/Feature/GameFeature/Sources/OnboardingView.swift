@@ -39,8 +39,8 @@ public struct OnboardingView: View {
         .overlay {
             VStack {
                 Spacer()
-                Button {
-                    
+                NavigationLink {
+                    Text("!@#")
                 } label: {
                     RoundedRectangle(cornerRadius: 16)
                         .fill(Asset.Color.red.color)
