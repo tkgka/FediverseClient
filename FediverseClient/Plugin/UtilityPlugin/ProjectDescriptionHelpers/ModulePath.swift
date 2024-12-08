@@ -6,7 +6,14 @@ public enum ModulePaths {
     
     case feature(Feature)
     
-    public enum Feature: String {
+public enum Feature: String {
+        case Assets
+        case GameFeature
+        case MiniProgramFeature
+        case XMPPFeature
+        case UIComponent
+        case RSSFeature
+        case FediverseFeature
         case NetworkingFeature
     }
 }

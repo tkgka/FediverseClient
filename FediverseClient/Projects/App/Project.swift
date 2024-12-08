@@ -5,7 +5,11 @@ import EnvPlugin
 
 let targets: [Target] = [
     .makeApp(name: ProjectInfo.name, dependencies: [
-        ModulePaths.feature(.NetworkingFeature).dependency
+        ModulePaths.feature(.GameFeature).dependency,
+        ModulePaths.feature(.MiniProgramFeature).dependency,
+        ModulePaths.feature(.XMPPFeature).dependency,
+        ModulePaths.feature(.RSSFeature).dependency,
+        ModulePaths.feature(.FediverseFeature).dependency
     ])
 ].addTest()
 

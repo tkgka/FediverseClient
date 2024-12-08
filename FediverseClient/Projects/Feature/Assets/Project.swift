@@ -3,9 +3,9 @@ import UtilityPlugin
 import ProjectDescriptionHelpers
 
 let project = Project.module(
-    .feature(.NetworkingFeature),
-    product: .framework, targets: [],
+    .feature(.Assets),
+    product: .staticLibrary, targets: [],
     dependencies: [
-        .external(name: "Alamofire")
+        
     ]
 )

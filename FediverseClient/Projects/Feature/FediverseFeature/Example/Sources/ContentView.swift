@@ -1,5 +1,5 @@
 import SwiftUI
-import NetworkingFeature
+import FediverseFeature
 
 public struct ContentView: View {
     public init() {}
@@ -14,10 +14,6 @@ public struct ContentView: View {
                 stage: .init(systemName: "trash.circle.fill")
             )
             Spacer()
-        }.task {
-            let result = await NetworkingService().request(api: NodeInfoAPI.get(url: URL(string: "https://haze.social/nodeinfo/2.0")!), dtoType: NodeInfoDTO.self)
-            
-            print(result) // swiftlint:disable:this no_print
         }
     }
 }
