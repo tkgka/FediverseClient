@@ -40,7 +40,7 @@ public struct OnboardingView: View {
             VStack {
                 Spacer()
                 NavigationLink {
-                    Text("!@#")
+                    GameListView()
                 } label: {
                     RoundedRectangle(cornerRadius: 16)
                         .fill(Asset.Color.red.color)
@@ -50,8 +50,4 @@ public struct OnboardingView: View {
             }
         }
     }
-}
-
-#Preview {
-    OnboardingView()
 }
