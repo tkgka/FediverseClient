@@ -13,7 +13,15 @@ public struct GameListView: View {
     public init () {}
     
     public var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ScrollView {
+            HStack {
+                Text("Choose the game you want")
+                    .font(.system(size: 32, weight: .bold, design: .rounded))
+                Spacer()
+            }
+        }
+        .navigationTitle("Games")
+        .padding(.horizontal, 16)
     }
 }
 
