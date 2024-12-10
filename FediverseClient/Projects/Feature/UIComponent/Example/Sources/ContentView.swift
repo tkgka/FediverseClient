@@ -8,23 +8,42 @@ public struct ContentView: View {
         NavigationView {
             ScrollView {
                 LazyVStack {
-                    NavigationLink {
-                        PopUpTestView()
-                    } label: {
-                        RoundedRectangle(cornerRadius: 16)
-                            .fill(.blue)
-                            .overlay {
-                                Text("Button")
-                                    .foregroundStyle(.white)
-                            }
-                            .frame(height: 56)
-                            .padding(.horizontal, 16)
+                    ForEach(Views.allCases, id: \.self) { viewContent in
+                        NavigationLink {
+                            viewContent.view
+                        } label: {
+                            RoundedRectangle(cornerRadius: 16)
+                                .fill(.blue)
+                                .overlay {
+                                    Text(viewContent.rawValue)
+                                        .foregroundStyle(.white)
+                                }
+                                .frame(height: 56)
+                                .padding(.horizontal, 16)
+                        }
+                        .buttonStyle(ShrinkButtonStyle())
                     }
-                    .buttonStyle(ShrinkButtonStyle())
                 }
             }
         }
     }
+    
+    enum Views: String, CaseIterable {
+        
+        case popUp
+        case ExpendedContent
+        
+        @ViewBuilder
+        var view: some View {
+            switch self {
+            case .popUp:
+                PopUpTestView()
+            case .ExpendedContent:
+                ExpendedContentTestView()
+            }
+        }
+    }
+    
 }
 
 struct ContentView_Previews: PreviewProvider {
