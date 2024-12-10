@@ -8,8 +8,8 @@ public struct ContentView: View {
         NavigationView {
             ScrollView {
                 LazyVStack {
-                    Button {
-                        
+                    NavigationLink {
+                        PopUpTestView()
                     } label: {
                         RoundedRectangle(cornerRadius: 16)
                             .fill(.blue)
