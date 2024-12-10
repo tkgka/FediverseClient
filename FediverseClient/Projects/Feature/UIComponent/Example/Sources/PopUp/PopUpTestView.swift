@@ -7,10 +7,74 @@
 //
 
 import SwiftUI
+import UIComponent
 
 struct PopUpTestView: View {
+    
+    @State var isPresented: Bool = false
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Button("Show Pop-Up") {
+            isPresented = true
+        }
+        .popUpSheet(isPresented: $isPresented) {
+            VStack {
+                HStack {
+                    Text("Delete")
+                        .font(.title)
+                        .bold()
+                        .padding(.top, 24)
+                    Spacer()
+                    Button {
+                        isPresented.toggle()
+                    } label: {
+                        Image(systemName: "xmark")
+                    }
+                    
+                }
+                RoundedRectangle(cornerRadius: 24)
+                    .fill(.red)
+                    .padding(.horizontal, 4)
+                    .frame(height: 180)
+                
+                HStack {
+                    Toggle(isOn: $isPresented) {
+                        Text("Delete")
+                    }
+                }
+                HStack {
+                    Toggle(isOn: $isPresented) {
+                        Text("Delete")
+                    }
+                }
+                HStack {
+                    Toggle(isOn: $isPresented) {
+                        Text("Delete")
+                    }
+                }
+                HStack {
+                    Toggle(isOn: $isPresented) {
+                        Text("Delete")
+                    }
+                }
+                HStack {
+                    Capsule()
+                        .fill(.gray)
+                        .overlay {
+                            Text("No")
+                        }
+                    Capsule()
+                        .fill(.red)
+                        .overlay {
+                            Text("Yes")
+                                .foregroundStyle(.white)
+                        }
+                }
+                .frame(height: 48)
+                .padding(.top, 16)
+            }
+            .padding(.horizontal, 24)
+        }
     }
 }
 
