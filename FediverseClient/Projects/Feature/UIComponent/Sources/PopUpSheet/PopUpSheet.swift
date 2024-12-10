@@ -16,8 +16,7 @@ extension View {
         @ViewBuilder content: @escaping () -> PopupContent
     ) -> some View {
         ZStack {
-            self // The original view
-            
+            self
             if isPresented.wrappedValue {
                 Color.black.opacity(0.3)
                     .ignoresSafeArea()
@@ -37,9 +36,9 @@ extension View {
                         }
                         .padding(.horizontal, 16)
                 }
-                .transition(.move(edge: .bottom)) // Ensures sliding in/out
+                .transition(.move(edge: .bottom))
             }
         }
-        .animation(.easeInOut, value: isPresented.wrappedValue) // Animate changes to isPresented
+        .animation(.easeInOut, value: isPresented.wrappedValue)
     }
 }
