@@ -10,10 +10,11 @@ import SwiftUI
 
 struct TextInputTestView: View {
     
+    @State var isShowing: Bool = false
     @State var text: String = ""
     
     var body: some View {
-        VStack(alignment: .leading) {
+        ScrollView {
             Text("TextInput Example")
                 .font(.title)
                 .bold()
@@ -24,6 +25,7 @@ struct TextInputTestView: View {
                 .padding()
             Text("loreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum")
             RoundedRectangle(cornerRadius: 116)
+                .frame(height: 50)
                 .padding(.horizontal, 32)
                 .foregroundColor(.blue)
                 .overlay {
@@ -32,10 +34,13 @@ struct TextInputTestView: View {
                         .bold()
                     
                 }
+                .onTapGesture {
+                    isShowing.toggle()
+                }
         }
         .padding(.horizontal, 8)
-        .background(.gray)
-        .textInput(text: $text)
+        .background(.white)
+        .textInput(isShowing: $isShowing, text: $text)
     }
 }
 
@@ -45,21 +50,30 @@ struct TextInputTestView: View {
 
 extension View {
     
-    public func textInput(text: Binding<String>) -> some View {
-        VStack(spacing: 0) {
-            ScrollView {
+    public func textInput(isShowing: Binding<Bool>, text: Binding<String>) -> some View {
+        ZStack {
+            Color.black.ignoresSafeArea()
+            VStack(spacing: 0) {
                 self
+                    .clipShape(
+                        .rect(
+                            bottomLeadingRadius: isShowing.wrappedValue ? 32 : 0,
+                            bottomTrailingRadius: isShowing.wrappedValue ? 32 : 0,
+                            style: .continuous
+                        )
+                    )
+                if isShowing.wrappedValue {
+                    TextField(
+                        "free_form",
+                        text: text,
+                        prompt: Text("Type here..."),
+                        axis: .vertical
+                    )
+                    .lineSpacing(10.0)
+                    .padding(16)
+                    .foregroundStyle(.white)
+                }
             }
-            TextField(
-                "free_form",
-                text: text,
-                prompt: Text("Type here..."),
-                axis: .vertical
-            )
-            .lineSpacing(10.0)
-            .padding(16)
-            .foregroundStyle(.white)
         }
-        .background(.black)
     }
 }
