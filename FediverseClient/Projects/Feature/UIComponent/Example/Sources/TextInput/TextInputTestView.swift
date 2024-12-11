@@ -64,21 +64,35 @@ extension View {
                         )
                     )
                 if isShowing.wrappedValue {
-                    TextField(
-                        "",
-                        text: text,
-                        prompt: Text("Type here...")
-                            .foregroundStyle(.white),
-                        axis: .vertical
-                    )
-                    .lineSpacing(10.0)
-                    .padding(16)
-                    .foregroundStyle(.white)
-                    .background {
-                        Color.black.ignoresSafeArea()
-                    }
+                    TextInputView(text: text)
                 }
             }
+        }
+    }
+}
+
+
+struct TextInputView: View {
+    @FocusState private var isFocused: Bool
+    @Binding var text: String
+
+    var body: some View {
+        TextField(
+            "",
+            text: $text,
+            prompt: Text("Type here...")
+                .foregroundStyle(.white),
+            axis: .vertical
+        )
+        .focused($isFocused)
+        .lineSpacing(10.0)
+        .padding(16)
+        .foregroundStyle(.white)
+        .background {
+            Color.black.ignoresSafeArea()
+        }
+        .onAppear {
+            isFocused = true
         }
     }
 }
