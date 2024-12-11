@@ -52,7 +52,7 @@ extension View {
     
     public func textInput(isShowing: Binding<Bool>, text: Binding<String>) -> some View {
         ZStack {
-            Color.black.ignoresSafeArea(edges: .bottom)
+            Color.black
             VStack(spacing: 0) {
                 self
                     .clipShape(
@@ -72,6 +72,9 @@ extension View {
                     .lineSpacing(10.0)
                     .padding(16)
                     .foregroundStyle(.white)
+                    .background {
+                        Color.black.ignoresSafeArea()
+                    }
                 }
             }
         }
