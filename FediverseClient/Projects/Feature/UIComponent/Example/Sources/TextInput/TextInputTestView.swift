@@ -23,7 +23,10 @@ struct TextInputTestView: View {
                 .padding(.horizontal, 32)
                 .foregroundColor(.blue)
                 .padding()
-            Text("loreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum")
+            ForEach(0..<50, id: \.self) { i in
+                Text("Item \(i)")
+                    .padding()
+            }
             Capsule()
                 .frame(height: 50)
                 .padding(.horizontal, 32)
