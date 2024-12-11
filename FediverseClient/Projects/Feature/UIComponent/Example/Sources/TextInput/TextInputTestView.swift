@@ -42,6 +42,7 @@ struct TextInputTestView: View {
                     isShowing.toggle()
                 }
         }
+        .scrollDismissesKeyboard(.interactively)
         .padding(.horizontal, 8)
         .background(.white)
         .textInput(isShowing: $isShowing, text: $text)
