@@ -31,15 +31,18 @@ public struct ContentView: View {
     enum Views: String, CaseIterable {
         
         case popUp
-        case ExpendedContent
+        case expendedContent
+        case textInput
         
         @ViewBuilder
         var view: some View {
             switch self {
             case .popUp:
                 PopUpTestView()
-            case .ExpendedContent:
+            case .expendedContent:
                 ExpendedContentTestView()
+            case .textInput:
+                TextInputTestView()
             }
         }
     }
