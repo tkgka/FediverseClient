@@ -18,13 +18,13 @@ struct TextInputTestView: View {
             Text("TextInput Example")
                 .font(.title)
                 .bold()
-            RoundedRectangle(cornerRadius: 116)
+            Capsule()
                 .frame(height: 50)
                 .padding(.horizontal, 32)
                 .foregroundColor(.blue)
                 .padding()
             Text("loreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum\nloreum")
-            RoundedRectangle(cornerRadius: 116)
+            Capsule()
                 .frame(height: 50)
                 .padding(.horizontal, 32)
                 .foregroundColor(.blue)
@@ -34,6 +34,7 @@ struct TextInputTestView: View {
                         .bold()
                     
                 }
+                .padding(.bottom, 16)
                 .onTapGesture {
                     isShowing.toggle()
                 }
@@ -64,9 +65,10 @@ extension View {
                     )
                 if isShowing.wrappedValue {
                     TextField(
-                        "free_form",
+                        "",
                         text: text,
-                        prompt: Text("Type here..."),
+                        prompt: Text("Type here...")
+                            .foregroundStyle(.white),
                         axis: .vertical
                     )
                     .lineSpacing(10.0)
