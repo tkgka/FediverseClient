@@ -43,7 +43,30 @@ struct TextInputTestView: View {
             .scrollDismissesKeyboard(.immediately)
             .padding(.horizontal, 8)
             .background(.white)
-            .textInput(isShowing: $isShowing, text: $text)
+            .textInput(isShowing: $isShowing, text: $text) {
+                HStack(alignment: .bottom) {
+                    Button {
+                        isShowing = false
+                    } label: {
+                        Capsule()
+                            .fill(.white)
+                            .frame(width: 72, height: 24)
+                            .overlay {
+                                Text("dismiss")
+                                    .padding(.bottom,4)
+                                    .foregroundStyle(.black)
+                            }
+                    }
+                    
+                    ScrollView(.horizontal) {
+                        HStack { // TODO: -
+                        }
+                    }
+                    .scrollIndicators(.hidden)
+                    
+                }
+                .padding(.vertical, 8)
+            }
             .onChange(of: text) { oldValue, newValue in
                 guard let selectedId else { return }
                 withAnimation {
@@ -60,7 +83,11 @@ struct TextInputTestView: View {
 
 extension View {
     
-    public func textInput(isShowing: Binding<Bool>, text: Binding<String>) -> some View {
+    public func textInput<TopViewContent: View>(
+        isShowing: Binding<Bool>,
+        text: Binding<String>,
+        @ViewBuilder topViewContent: @escaping () -> TopViewContent
+    ) -> some View {
         ZStack {
             Color.black
             VStack(spacing: 0) {
@@ -73,7 +100,7 @@ extension View {
                         )
                     )
                 if isShowing.wrappedValue {
-                    TextInputView(isShowing: isShowing, text: text)
+                    TextInputView(isShowing: isShowing, text: text, topViewContent: topViewContent)
                 }
             }
         }
@@ -82,36 +109,18 @@ extension View {
 }
 
 
-struct TextInputView: View {
-    @FocusState var isFocused: Bool
+struct TextInputView<TopViewContent: View>: View {
+    
     @Binding var isShowing: Bool
     @Binding var text: String
     
+    @FocusState private var isFocused: Bool
+    @ViewBuilder var topViewContent: TopViewContent
+    
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack(alignment: .bottom) {
-                Button {
-                    isShowing = false
-                } label: {
-                    Capsule()
-                        .fill(.white)
-                        .frame(width: 72, height: 24)
-                        .overlay {
-                            Text("dismiss")
-                                .padding(.bottom,4)
-                                .foregroundStyle(.black)
-                        }
-                }
-                
-                ScrollView(.horizontal) {
-                    HStack { // TODO: -
-                    }
-                }
-                .scrollIndicators(.hidden)
-                    
-            }
-            .padding(.vertical, 8)
-            
+            topViewContent
             HStack(alignment: .bottom, spacing: 0) {
                 TextField(
                     "",
