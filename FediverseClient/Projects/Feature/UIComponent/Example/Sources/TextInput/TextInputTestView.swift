@@ -12,40 +12,45 @@ struct TextInputTestView: View {
     
     @State var isShowing: Bool = false
     @State var text: String = ""
+    @State var selectedId: Int?
     
     var body: some View {
-        ScrollView {
-            Text("TextInput Example")
-                .font(.title)
-                .bold()
-            Capsule()
-                .frame(height: 50)
-                .padding(.horizontal, 32)
-                .foregroundColor(.blue)
-                .padding()
-            ForEach(0..<50, id: \.self) { i in
-                Text("Item \(i)")
+        ScrollViewReader { proxy in
+            ScrollView {
+                Text("TextInput Example")
+                    .font(.title)
+                    .bold()
+                Capsule()
+                    .frame(height: 50)
+                    .padding(.horizontal, 32)
+                    .foregroundColor(.blue)
                     .padding()
+                ForEach(0..<50, id: \.self) { i in
+                    Text("Item \(i)")
+                        .padding()
+                        .id(i)
+                        .onTapGesture {
+                            isShowing.toggle()
+                            selectedId = i
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                                withAnimation {
+                                    proxy.scrollTo(i, anchor: .bottom)
+                                }
+                            }
+                        }
+                }
             }
-            Capsule()
-                .frame(height: 50)
-                .padding(.horizontal, 32)
-                .foregroundColor(.blue)
-                .overlay {
-                    Text(text)
-                        .foregroundStyle(.white)
-                        .bold()
-                    
+            .scrollDismissesKeyboard(.immediately)
+            .padding(.horizontal, 8)
+            .background(.white)
+            .textInput(isShowing: $isShowing, text: $text)
+            .onChange(of: text) { oldValue, newValue in
+                guard let selectedId else { return }
+                withAnimation {
+                    proxy.scrollTo(selectedId, anchor: .bottom)
                 }
-                .padding(.bottom, 16)
-                .onTapGesture {
-                    isShowing.toggle()
-                }
+            }
         }
-        .scrollDismissesKeyboard(.interactively)
-        .padding(.horizontal, 8)
-        .background(.white)
-        .textInput(isShowing: $isShowing, text: $text)
     }
 }
 
@@ -68,35 +73,62 @@ extension View {
                         )
                     )
                 if isShowing.wrappedValue {
-                    TextInputView(text: text)
+                    TextInputView(isShowing: isShowing, text: text)
                 }
             }
         }
+        .animation(.easeInOut, value: isShowing.wrappedValue)
     }
 }
 
 
 struct TextInputView: View {
-    @FocusState private var isFocused: Bool
+    @FocusState var isFocused: Bool
+    @Binding var isShowing: Bool
     @Binding var text: String
-
+    
     var body: some View {
-        TextField(
-            "",
-            text: $text,
-            prompt: Text("Type here...")
-                .foregroundStyle(.white),
-            axis: .vertical
-        )
-        .focused($isFocused)
-        .lineSpacing(10.0)
+        HStack(alignment: .bottom) {
+            TextField(
+                "",
+                text: $text,
+                prompt: Text("Type here...")
+                    .foregroundStyle(.white),
+                axis: .vertical
+            )
+            .focused($isFocused)
+            .lineSpacing(10.0)
+            .foregroundStyle(.white)
+            
+            if text.count > 0 {
+                Button {
+                    
+                } label: {
+                    Circle()
+                        .fill(.white)
+                        .frame(height: 32)
+                        .overlay {
+                            Image(systemName: "paperplane")
+                                .renderingMode(.template)
+                                .resizable()
+                                .scaledToFit()
+                                .padding(8)
+                        }
+                        .padding(.leading, 16)
+                }
+            }
+        }
         .padding(16)
-        .foregroundStyle(.white)
         .background {
             Color.black.ignoresSafeArea()
         }
         .onAppear {
             isFocused = true
         }
+        .onChange(of: isFocused) { _, newValue in
+            guard !newValue else { return }
+            //            isShowing = false
+        }
+        .transition(.scale)
     }
 }
