@@ -88,37 +88,63 @@ struct TextInputView: View {
     @Binding var text: String
     
     var body: some View {
-        HStack(alignment: .bottom) {
-            TextField(
-                "",
-                text: $text,
-                prompt: Text("Type here...")
-                    .foregroundStyle(.white),
-                axis: .vertical
-            )
-            .focused($isFocused)
-            .lineSpacing(10.0)
-            .foregroundStyle(.white)
-            
-            if text.count > 0 {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack(alignment: .bottom) {
                 Button {
-                    
+                    isShowing = false
                 } label: {
-                    Circle()
+                    Capsule()
                         .fill(.white)
-                        .frame(height: 32)
+                        .frame(width: 72, height: 24)
                         .overlay {
-                            Image(systemName: "paperplane")
-                                .renderingMode(.template)
-                                .resizable()
-                                .scaledToFit()
-                                .padding(8)
+                            Text("dismiss")
+                                .padding(.bottom,4)
+                                .foregroundStyle(.black)
                         }
-                        .padding(.leading, 16)
+                }
+                
+                ScrollView(.horizontal) {
+                    HStack { // TODO: -
+                    }
+                }
+                .scrollIndicators(.hidden)
+                    
+            }
+            .padding(.vertical, 8)
+            
+            HStack(alignment: .bottom, spacing: 0) {
+                TextField(
+                    "",
+                    text: $text,
+                    prompt: Text("Type here...")
+                        .foregroundStyle(.white),
+                    axis: .vertical
+                )
+                .focused($isFocused)
+                .lineSpacing(10.0)
+                .foregroundStyle(.white)
+                
+                if text.count > 0 {
+                    Button {
+                        
+                    } label: {
+                        Circle()
+                            .fill(.white)
+                            .frame(height: 32)
+                            .overlay {
+                                Image(systemName: "paperplane")
+                                    .renderingMode(.template)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .padding(8)
+                            }
+                            .padding(.leading, 16)
+                    }
                 }
             }
         }
-        .padding(16)
+        .padding(.horizontal, 16)
+        .padding(.bottom, 8)
         .background {
             Color.black.ignoresSafeArea()
         }
