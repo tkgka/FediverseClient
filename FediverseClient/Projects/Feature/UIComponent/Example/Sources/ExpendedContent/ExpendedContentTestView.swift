@@ -9,16 +9,34 @@
 import SwiftUI
 
 struct ExpendedContentTestView: View {
+    @State var isPresented: Bool = false
+    
     var body: some View {
         VStack {
             Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-                .expendedContent() {
-                    Text("12\n43\n12\n43\n12\n43\n12\n43\n12\n43\n12\n43\n")
-                        .fixedSize(horizontal: false, vertical: true)
-                }
                 .padding(.top, 128)
             Spacer()
-            Text("!@3")
+            Button {
+                isPresented.toggle()
+            } label: {
+                Capsule()
+                    .fill(.black)
+                    .frame(width: 120, height: 32)
+            }
+            .expendedContent(isPresented: $isPresented) {
+                VStack {
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(.gray)
+                        .padding(.horizontal, 16)
+                    Button {
+                        isPresented.toggle()
+                    } label: {
+                        Capsule()
+                            .fill(.gray)
+                            .frame(width: 120, height: 32)
+                    }
+                }
+            }
         }
     }
 }
@@ -27,49 +45,37 @@ struct ExpendedContentTestView: View {
     ExpendedContentTestView()
 }
 
-
-struct ExpendedContentView<Content: View, BackgroundContent: View>: View {
-    @State private var isExpanded: Bool = false // State property to manage expansion
-    let backgroundContent: BackgroundContent
-    let content: Content
-    
-    init(
-        @ViewBuilder backgroundContent: @escaping () -> BackgroundContent,
-        @ViewBuilder content: @escaping () -> Content
-    ) {
-        self.backgroundContent = backgroundContent()
-        self.content = content()
-    }
-    
-    var body: some View {
-        ZStack(alignment: .top) {
-            backgroundContent
-                .onLongPressGesture {
-                    withAnimation {
-                        isExpanded.toggle() // Toggle the state when tapped
-                    }
-                }
-            if isExpanded {
-                content
-                    .background(
-                        RoundedRectangle(cornerRadius: 32)
-                            .fill(.white)
-                    )
-            }
-        }
-    }
-}
-
 extension View {
     public func expendedContent<ExpendedContent: View>(
+        isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> ExpendedContent
     ) -> some View {
         ExpendedContentView(
-            backgroundContent: {
-                self
-            }, content: {
-                content()
-            }
+            isShowing: isPresented,
+            expendedContent: content,
+            originalContent: { self }
         )
+    }
+}
+
+struct ExpendedContentView<
+    ExpendedContent: View,
+    OriginalContent: View
+>: View {
+    @Binding var isShowing: Bool
+    let expendedContent: () -> ExpendedContent
+    let originalContent: () -> OriginalContent
+    
+    var body: some View {
+        VStack {
+            if isShowing {
+                expendedContent()
+                    .transition(.scale(.zero, anchor: .bottom).combined(with: .blurReplace))
+            } else {
+                originalContent()
+                    .transition(.blurReplace)
+            }
+        }
+        .animation(.easeInOut, value: isShowing)
     }
 }
