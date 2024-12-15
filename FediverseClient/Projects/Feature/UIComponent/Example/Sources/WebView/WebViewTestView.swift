@@ -22,6 +22,7 @@ struct WebViewTestView: View {
                 Text("WKWebView Sheet로 보여주기")
                     .sheet(isPresented: $isSheetPresented) {
                         WKWebViewWrapper(url: "https://www.naver.com")
+                            .ignoresSafeArea(edges: .bottom)
                     }
             }
             Button {
@@ -30,6 +31,7 @@ struct WebViewTestView: View {
                 Text("WKWebView 전체화면으로 보여주기")
                     .fullScreenCover(isPresented: $isFilledPresented) {
                         WKWebViewWrapper(url: "https://www.naver.com")
+                            .ignoresSafeArea(edges: .bottom)
                             .overlay {
                                 VStack {
                                     HStack {
