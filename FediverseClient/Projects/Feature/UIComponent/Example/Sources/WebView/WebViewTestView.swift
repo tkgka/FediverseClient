@@ -33,7 +33,13 @@ struct WebViewTestView: View {
             }
             if isFilledPresented {
                 WKWebViewWrapper(url: "https://www.naver.com")
+                    .transition(.move(edge: .bottom))
             }
         }
+        .animation(.easeInOut, value: isFilledPresented)
     }
+}
+
+#Preview {
+    ContentView()
 }
