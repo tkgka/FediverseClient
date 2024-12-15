@@ -33,6 +33,7 @@ public struct ContentView: View {
         case popUp
         case expendedContent
         case textInput
+        case webView
         
         @ViewBuilder
         var view: some View {
@@ -43,6 +44,8 @@ public struct ContentView: View {
                 ExpendedContentTestView()
             case .textInput:
                 TextInputTestView()
+            case .webView:
+                WebViewTestView()
             }
         }
     }
