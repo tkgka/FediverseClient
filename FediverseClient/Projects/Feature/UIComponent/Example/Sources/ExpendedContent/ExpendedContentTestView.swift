@@ -9,27 +9,49 @@
 import SwiftUI
 
 struct ExpendedContentTestView: View {
-    @State var isPresented: Bool = false
+    @State var isPresented1: Bool = false
+    @State var isPresented2: Bool = false
     
     var body: some View {
         VStack {
-            Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-                .padding(.top, 128)
-            Spacer()
             Button {
-                isPresented.toggle()
+                isPresented1.toggle()
             } label: {
                 Capsule()
                     .fill(.black)
                     .frame(width: 120, height: 32)
             }
-            .expendedContent(isPresented: $isPresented) {
+            .expendedContent(isPresented: $isPresented1, anchor: .top) {
+                VStack {
+                    Button {
+                        isPresented1.toggle()
+                    } label: {
+                        Capsule()
+                            .fill(.gray)
+                            .frame(width: 120, height: 32)
+                    }
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(.gray)
+                        .padding(.horizontal, 16)
+                }
+            }
+            
+            Spacer()
+            
+            Button {
+                isPresented2.toggle()
+            } label: {
+                Capsule()
+                    .fill(.black)
+                    .frame(width: 120, height: 32)
+            }
+            .expendedContent(isPresented: $isPresented2, anchor: .bottom) {
                 VStack {
                     RoundedRectangle(cornerRadius: 16)
                         .fill(.gray)
                         .padding(.horizontal, 16)
                     Button {
-                        isPresented.toggle()
+                        isPresented2.toggle()
                     } label: {
                         Capsule()
                             .fill(.gray)
@@ -48,12 +70,14 @@ struct ExpendedContentTestView: View {
 extension View {
     public func expendedContent<ExpendedContent: View>(
         isPresented: Binding<Bool>,
+        anchor: UnitPoint = .center,
         @ViewBuilder content: @escaping () -> ExpendedContent
     ) -> some View {
         ExpendedContentView(
             isShowing: isPresented,
             expendedContent: content,
-            originalContent: { self }
+            originalContent: { self },
+            anchor: anchor
         )
     }
 }
@@ -65,12 +89,13 @@ struct ExpendedContentView<
     @Binding var isShowing: Bool
     let expendedContent: () -> ExpendedContent
     let originalContent: () -> OriginalContent
+    let anchor: UnitPoint
     
     var body: some View {
         VStack {
             if isShowing {
                 expendedContent()
-                    .transition(.scale(.zero, anchor: .bottom).combined(with: .blurReplace))
+                    .transition(.scale(.zero, anchor: anchor).combined(with: .blurReplace))
             } else {
                 originalContent()
                     .transition(.blurReplace)
