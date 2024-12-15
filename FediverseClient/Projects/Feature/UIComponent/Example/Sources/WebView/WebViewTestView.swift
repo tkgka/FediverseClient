@@ -15,28 +15,38 @@ struct WebViewTestView: View {
     @State var isFilledPresented = false
     
     var body: some View {
-        ZStack {
-            VStack {
-                Button {
-                    self.isSheetPresented.toggle()
-                } label: {
-                    Text("WKWebView Sheet로 보여주기")
-                        .sheet(isPresented: $isSheetPresented) {
-                            WKWebViewWrapper(url: "https://www.naver.com")
-                        }
-                }
-                Button {
-                    isFilledPresented.toggle()
-                } label: {
-                    Text("WKWebView 전체화면으로 보여주기")
-                }
+        VStack {
+            Button {
+                self.isSheetPresented.toggle()
+            } label: {
+                Text("WKWebView Sheet로 보여주기")
+                    .sheet(isPresented: $isSheetPresented) {
+                        WKWebViewWrapper(url: "https://www.naver.com")
+                    }
             }
-            if isFilledPresented {
-                WKWebViewWrapper(url: "https://www.naver.com")
-                    .transition(.move(edge: .bottom))
+            Button {
+                isFilledPresented.toggle()
+            } label: {
+                Text("WKWebView 전체화면으로 보여주기")
+                    .fullScreenCover(isPresented: $isFilledPresented) {
+                        WKWebViewWrapper(url: "https://www.naver.com")
+                            .overlay {
+                                VStack {
+                                    HStack {
+                                        Spacer()
+                                        Button {
+                                            isFilledPresented.toggle()
+                                        } label: {
+                                            Image(systemName: "xmark")
+                                        }
+                                    }
+                                    .padding(.horizontal, 16)
+                                    Spacer()
+                                }
+                            }
+                    }
             }
         }
-        .animation(.easeInOut, value: isFilledPresented)
     }
 }
 

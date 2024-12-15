@@ -34,6 +34,7 @@ public struct ContentView: View {
         case expendedContent
         case textInput
         case webView
+        case infinityScroll
         
         @ViewBuilder
         var view: some View {
@@ -46,6 +47,8 @@ public struct ContentView: View {
                 TextInputTestView()
             case .webView:
                 WebViewTestView()
+            case .infinityScroll:
+                InfinityScrollTestView()
             }
         }
     }
