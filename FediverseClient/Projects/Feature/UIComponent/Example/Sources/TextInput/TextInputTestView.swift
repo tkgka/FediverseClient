@@ -43,8 +43,14 @@ struct TextInputTestView: View {
             .scrollDismissesKeyboard(.immediately)
             .padding(.horizontal, 8)
             .background(.white)
-//            .textInput(isShowing: $isShowing, text: $text) {
-//            }
+            .onGeometryChange(for: CGSize.self) { proxy in
+                proxy.size
+            } action: { _ in
+                guard let selectedId else { return }
+                withAnimation {
+                    proxy.scrollTo(selectedId, anchor: .bottom)
+                }
+            }
             .textInput(isShowing: $isShowing, text: $text, topViewContent: {
                 HStack(alignment: .bottom) {
                     Button {
@@ -88,12 +94,6 @@ struct TextInputTestView: View {
                     }
                 }
             })
-            .onChange(of: text) { oldValue, newValue in
-                guard let selectedId else { return }
-                withAnimation {
-                    proxy.scrollTo(selectedId, anchor: .bottom)
-                }
-            }
         }
     }
 }
