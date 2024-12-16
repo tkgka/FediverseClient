@@ -31,18 +31,30 @@ struct WebViewTestView: View {
                 Text("WKWebView 전체화면으로 보여주기")
                     .fullScreenCover(isPresented: $isFilledPresented) {
                         WKWebViewWrapper(url: "https://www.naver.com")
+                            .padding(.top, 16)
                             .ignoresSafeArea(edges: .bottom)
                             .overlay {
                                 VStack {
                                     HStack {
                                         Spacer()
-                                        Button {
-                                            isFilledPresented.toggle()
-                                        } label: {
-                                            Image(systemName: "xmark")
-                                        }
+                                        Capsule()
+                                            .fill(.ultraThinMaterial.opacity(0.5))
+                                            .frame(width: 100, height: 32)
+                                            .overlay {
+                                                HStack {
+                                                    Spacer()
+                                                    Button {
+                                                        isFilledPresented.toggle()
+                                                    } label: {
+                                                        Image(systemName: "xmark")
+                                                            .renderingMode(.template)
+                                                            .foregroundStyle(.white)
+                                                    }
+                                                }
+                                                .padding(.horizontal, 8)
+                                            }
                                     }
-                                    .padding(.horizontal, 16)
+                                    .padding(.horizontal, 8)
                                     Spacer()
                                 }
                             }
