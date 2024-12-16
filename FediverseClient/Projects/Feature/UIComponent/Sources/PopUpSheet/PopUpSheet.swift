@@ -44,7 +44,8 @@ struct PopUPSheetView<PopUPContent: View>: View {
     let backgroundColor: Color
     @Binding var isPresented: Bool
     
-    @State var offset: CGFloat = 0
+    @State var offsetX: CGFloat = 0
+    @State var offsetY: CGFloat = 0
     @ViewBuilder var content: () -> PopUPContent
     
     var body: some View {
@@ -59,22 +60,27 @@ struct PopUPSheetView<PopUPContent: View>: View {
                 }
                 .padding(.horizontal, 16)
         }
-        .offset(y: offset)
+        .offset(x: offsetX, y: offsetY)
         .gesture(
             DragGesture()
                 .onChanged { value in
-                    let offsetValue = max(-20, value.translation.height)
-                    offset = offsetValue
+                    let offsetXValue = min(max(-8, value.translation.width / 8), 8)
+                    let offsetYValue = max(-16, value.translation.height)
+                    offsetX = offsetXValue
+                    offsetY = offsetYValue
                 }
                 .onEnded { value in
-                    guard offset > 200 else {
-                        offset = 0
+                    offsetX = 0
+                    guard offsetY > 200 else {
+                        offsetY = 0
                         return
                     }
                     isPresented = false
+                    offsetY = 0
                 }
         )
-        .animation(.bouncy, value: offset)
+        .animation(.bouncy, value: offsetX)
+        .animation(.bouncy, value: offsetY)
         .transition(.move(edge: .bottom))
     }
 }
